@@ -7,13 +7,14 @@ import Button from "../../button";
 class Header extends Component {
     render() {
         return (
-            <div>
-                <div className={'headerWrap'}>
-                    <Button></Button>
+                <div className={'header_wrap'}>
+                    <div className={'logo_wrap'}></div>
+                    <div className={'header-buttons_wrap'}>
+                        <Button></Button>
+                        <Button></Button>
+                        <Button></Button>
+                    </div>
                 </div>
-                <Button></Button>
-
-            </div>
         );
     }
 }

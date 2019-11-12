@@ -1,11 +1,11 @@
 .button{
+    height: 30px;
     margin: 15px 0 0 15px;/*test удалить*/
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 40px;
     padding: 0 5px;
-    font-size: 20px;
+    font-size: 18px;
     font-family: sans-serif;
     box-shadow:inset -1px 1px 1px #5E5E5E,inset 1px 1px 1px #5E5E5E ;
     color: white;
