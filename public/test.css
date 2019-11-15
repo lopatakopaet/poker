@@ -1,0 +1,37 @@
+*,html,body{margin: 0;padding: 0;box-sizing: border-box}
+
+.table_wrap{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: grey;
+}
+
+.test_wrap{
+    position: relative;
+    display: block;
+    min-width: 200px;
+    min-height: 100px;
+    width: 500px;
+    height: 300px;
+    max-width: 500px;
+    max-height: 300px;
+    /*height: 1px;*/
+    border: 1px solid black;
+
+}
+.table{
+    /*display: flex;*/
+    background: silver;
+    /*width: 70%;*/
+    /*height: 60%;*/
+    height: 100%;
+    /*width: 100%;*/
+    border-radius: 50%;
+}
+/*.table:before{*/
+/*    content: '';*/
+/*    display: block;*/
+/*    margin-top: -50%;*/
+/*}*/

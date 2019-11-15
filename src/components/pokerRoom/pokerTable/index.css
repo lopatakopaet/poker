@@ -1,0 +1,14 @@
+.table_wrap{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: red;
+    height: 100%;
+    /*width: 60%;*/
+}
+.table_img_wrap{
+    width: 60%;
+}
+.table_img{
+    width: 100%;
+}

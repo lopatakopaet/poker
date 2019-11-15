@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Controls</title>
+    <link rel="stylesheet" href="./controlsStyle.css">
+</head>
+<body>
+    <div class="controls">
+        <div class="fixed_raise_buttons">
+            <div class="min_raise fixed_raise_buttons-style active">Min</div>
+            <div class="half_raise fixed_raise_buttons-style">1/2</div>
+            <div class="two-thirds_raise fixed_raise_buttons-style">2/3</div>
+            <div class="three-quarters_raise fixed_raise_buttons-style">3/4</div>
+            <div class="all-in_reise fixed_raise_buttons-style">All-in</div>
+        </div>
+        <div class="select_bet_wrap">
+            <div class="minus plus-minus">-</div>
+            <div class="variable-choice_block">
+                <input type="range" class="hidden_range_input" min="0" max="100" value="0">
+            </div>
+            <div class="plus plus-minus">+</div>
+            <input class="bet_size" type="text" maxlength="6">
+<!--            <div class="bet_size"></div>-->
+        </div>
+        <div class="decision_control_buttons">
+            <div class="button">Fold</div>
+            <div class="button">Call</div>
+            <div class="button">Raise to</div>
+        </div>
+
+
+    </div>
+    <div class="test"></div>
+</body>
+</html>
