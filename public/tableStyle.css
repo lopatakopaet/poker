@@ -1,17 +1,43 @@
+*,html,body{margin:0; padding: 0; box-sizing:border-box }
 .screen{
     display: flex;
     height: 100vh;
     justify-content: center;
     align-items: center;
 }
+.table_layout{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /*padding-top: 30px;*/
+    /*align-items: center;*/
+    width: 80%;
+    max-width: 80%;
+    min-width: 800px;
+    height: 80%;
+    border: 1px solid black;
+}
 .table{
-    max-width: 800px;
-    width: 800px;
-    height: 400px;
+    width: 90%;
+    height: 80%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*justify-content: space-between;*/
+    /*max-width: 800px;*/
+    /*width: 800px;*/
+    /*height: 400px;*/
+
     border: 1px solid black;
     border-radius: 50%;
 }
-.player{
+.player_block{
     /*display: flex;*/
     width: 200px;
     height: 60px;
@@ -19,5 +45,18 @@
 }
 .players-top_section, .players-mid_section, .players-bottom_section{
     display: flex;
+
+}
+.players-top_section{
     justify-content: space-around;
+}
+.players-mid_section{
+    justify-content: space-between;
+    align-items: center;
+}
+.players-bottom_section{
+    justify-content: space-around;
+}
+.cards-on-table{
+    display: flex;
 }
