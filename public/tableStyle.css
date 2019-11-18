@@ -6,20 +6,22 @@
     align-items: center;
 }
 .table_layout{
+    background: black;
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     /*padding-top: 30px;*/
     /*align-items: center;*/
-    width: 80%;
-    max-width: 80%;
+    width: 90%;
+    max-width: 90%;
     min-width: 800px;
     height: 80%;
     border: 1px solid black;
 }
 .table{
-    width: 90%;
+    background: #1E1E1E;
+    width: 80%;
     height: 80%;
     position: absolute;
     left: 0;
@@ -37,14 +39,10 @@
     border: 1px solid black;
     border-radius: 50%;
 }
-.player_block{
-    /*display: flex;*/
-    width: 200px;
-    height: 60px;
-    border: 1px solid red;
-}
+
 .players-top_section, .players-mid_section, .players-bottom_section{
     display: flex;
+    z-index: 100;
 
 }
 .players-top_section{
@@ -56,6 +54,54 @@
 }
 .players-bottom_section{
     justify-content: space-around;
+}
+.player_block{
+    /*display: flex;*/
+    width: 150px;
+    font-family: sans-serif;
+    font-weight: bold;
+    /*height: 60px;*/
+    /*border: 1px solid red;*/
+}
+.player_block-cards{
+    display: flex;
+    justify-content: center;
+    height: 70px;
+    /*background: #5E5E5E;*/
+}
+.player_block-cards img{
+    height: 100%;
+}
+.player_info{
+    position: relative;
+    display: flex;
+    background: black;
+    flex-direction: column;
+    /*justify-content: center;*/
+    align-items: center;
+    border: 2px solid #322C1F;
+    border-radius: 2px;
+
+}
+.player_info-name{
+    color: #C56E27;
+    /*font-family: sans-serif;*/
+    /*font-weight: bold;*/
+}
+.player_info-chips{
+    color: #E6E1A9;
+}
+.player_info_game-position{
+    font-size: 14px;
+    padding: 3px;
+    position: absolute;
+    left: -13px;
+    bottom: -9px;
+
+}
+.player_info_game-position--mp{
+    background: #1878D6;
+    color: white;
 }
 .cards-on-table{
     display: flex;
