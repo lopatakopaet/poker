@@ -20,11 +20,11 @@ class Body extends Component {
     render() {
         return (
             <div className={'body_wrap'}>
-                {/*<div className={'body_content'}></div>*/}
-                {/*<div className={'body_side-bar'}>*/}
-                {/*    <p>{this.state.date.toLocaleTimeString()}</p>*/}
-                {/*</div>*/}
                 <PokerRoom></PokerRoom>
+                <div className={'body_content'}></div>
+                <div className={'body_side-bar'}>
+                    <p>{this.state.date.toLocaleTimeString()}</p>
+                </div>
             </div>
         );
     }
