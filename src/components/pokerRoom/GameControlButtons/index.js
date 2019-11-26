@@ -15,22 +15,20 @@ class GameControlButtons extends Component {
         activeTab: 'minRaise',
         bank: this.props.bank,
         stack: this.props.stack,
-        minCall:this.props.minCall,
-        chooseToRaise: this.props.minCall,
-
+        chooseToRaise: this.props.minRaise,
     };
-    handleClick = (e) =>{
-        this.setState({activeTab:this.state.activeTab = e.target.id});
+    changeFixRaise = (id) => {
+        this.setState({activeTab: id});
         let raiseValue = '';
-        switch(e.target.id){
+        switch (id) {
             case 'minRaise':
-                raiseValue = this.state.minCall;
+                raiseValue = this.props.minRaise;
                 break;
             case 'halfRaise':
                 raiseValue = this.props.bank / 2;
                 break;
             case 'twoThirdsRaise':
-                raiseValue = Math.floor(this.props.bank * (2/3));
+                raiseValue = Math.floor(this.props.bank * (2 / 3));
                 break;
             case 'potBet':
                 raiseValue = this.props.bank;
@@ -39,35 +37,35 @@ class GameControlButtons extends Component {
                 raiseValue = this.props.stack;
                 break;
         }
-        this.setState({chooseToRaise:this.state.chooseToRaise = raiseValue});
+        this.setState({chooseToRaise: raiseValue});
+    };
+    handleChangeRaise = (e) => {
+        this.setState({chooseToRaise: e.target.value});
+    };
 
-        console.log(this.state.chooseToRaise)
-    };
-    handleChangeRaise = (e) =>{
-        this.setState({chooseToRaise:this.state.chooseToRaise = e.target.value});
-    };
     render() {
         return (
             <div className="controls">
 
                 <div className="fixed_raise_buttons">
-                    {tabs.map(tab => <div key = {tab.id} id={tab.id} onClick={this.handleClick} className={`fixed_raise_buttons-style ${this.state.activeTab === tab.id && 'active' }`}>{tab.text}</div>)}
-                    {/*<div className={`fixed_raise_buttons-style ${this.state.activeTab === 'minRaise' && 'active' }`}>Min</div>*/}
-                    {/*<div className={`fixed_raise_buttons-style ${this.state.activeTab === 'halfRaise' && 'active' }`} >1/2</div>*/}
-                    {/*<div className="two-thirds_raise fixed_raise_buttons-style">2/3</div>*/}
-                    {/*<div className="three-quarters_raise fixed_raise_buttons-style">3/4</div>*/}
-                    {/*<div className="all-in_raise fixed_raise_buttons-style">All-in</div>*/}
+                    {tabs.map(tab => <div key={tab.id} onClick={() => {
+                        this.changeFixRaise(tab.id)
+                    }} className={`fixed_raise_buttons-style ${this.state.activeTab === tab.id && 'active'}`}>
+                        {tab.text}
+                    </div>)}
                 </div>
                 <div className="select_bet_wrap">
                     <div className="minus plus-minus">-</div>
                     <div className="variable-choice_block">
-                        <input onChange={this.handleChangeRaise} id = 'range' type="range" className="hidden_range_input" min={this.state.minCall} max={this.state.stack} defaultValue="0"/>
+                        <input onChange={this.handleChangeRaise} id='range' type="range" className="hidden_range_input"
+                               min={this.props.minCall} max={this.state.stack} defaultValue="0"/>
                     </div>
                     <div className="plus plus-minus">+</div>
-                    <input onChange={this.handleChangeRaise} className="bet_size" type="number" maxLength="6" value={`${this.state.chooseToRaise}`}/>
+                    <input onChange={this.handleChangeRaise} className="bet_size" type="number" maxLength={6}
+                           value={`${this.state.chooseToRaise}`}/>
                 </div>
                 <div className="decision_control_buttons">
-                    <div className="button">Fold</div>
+                    <div className="button" onClick={this.props.onFold}>Fold</div>
                     <div className="button">Call</div>
                     <div className="button">Raise to</div>
                 </div>

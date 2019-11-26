@@ -32,7 +32,20 @@
     border: 1px solid black;
     border-radius: 50%;
 }
-
+.empty_seat{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(#322C1F,#000000);
+    font-family: sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #fff;
+    width: 150px;
+    border: 2px solid #322C1F;
+    border-radius: 50%;
+    cursor: pointer;
+}
 .players-top_section, .players-mid_section, .players-bottom_section{
     display: flex;
     z-index: 100;
@@ -90,12 +103,13 @@
     position: absolute;
     left: -13px;
     bottom: -9px;
-
-}
-.player_info_game-position--mp{
     background: #1878D6;
     color: white;
 }
+/*.player_info_game-position--bb{*/
+/*    background: #1878D6;*/
+/*    color: white;*/
+/*}*/
 .cards-on-table{
     display: flex;
 }
