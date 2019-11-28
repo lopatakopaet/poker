@@ -3,16 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "express": "^4.17.1",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
-    "react-scripts": "3.2.0"
+    "react-scripts": "3.2.0",
+    "socket.io": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "start server": "nodemon ./src/server/index.js"
   },
+  "proxy": "http://localhost:3030",
   "browserslist": {
     "production": [
       ">0.2%",

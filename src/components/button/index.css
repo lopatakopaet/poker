@@ -1,22 +1,25 @@
 .button{
-    height: 30px;
-    margin: 15px 0 0 15px;/*test удалить*/
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0 5px;
+    height: 50px;
+    width: 120px;
+    color: white;
+    border: 1px solid silver;
+    border-radius: 4px;
     font-size: 18px;
     font-family: sans-serif;
     box-shadow:inset -1px 1px 1px #5E5E5E,inset 1px 1px 1px #5E5E5E ;
-    color: white;
     background: rgb(0, 0, 0);
     background: -webkit-linear-gradient(355deg, rgb(0, 0, 0) 43%, rgb(79, 79, 79) 100%);
     background: -o-linear-gradient(355deg, rgb(0, 0, 0) 43%, rgb(79, 79, 79) 100%);
     background: -ms-linear-gradient(355deg, rgb(0, 0, 0) 43%, rgb(79, 79, 79) 100%);
     background: linear-gradient(355deg, rgb(0, 0, 0) 43%, rgb(79, 79, 79) 100%);
-    border-radius: 5px;
+    /*border-radius: 5px;*/
     user-select: none;
 }
+
+
 .button:hover{
     cursor: pointer;
     background: rgb(255,212,3) linear-gradient(rgb(80,50,50), rgb(22,40,40));

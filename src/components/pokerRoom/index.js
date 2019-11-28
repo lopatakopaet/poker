@@ -1,32 +1,42 @@
 import React, {Component} from 'react';
 import PokerTable from "./PokerTable";
 import GameControlButtons from './GameControlButtons'
-import {start, Handlers} from '../../core-game'
 import './index.css'
+// const players = require('../../core-game');
 
+import io from 'socket.io-client'
+
+const socket = io('http://localhost:3030');
 
 class PokerRoom extends Component {
     state = {
-        playerId: 111,
-        players: [],
+        // playerId: 111,
+        reservedSeats: [],
+        players: [
+            // {
+            //     id : 11111,
+            //     name : 'Vasya',
+            //     position: 'BB',
+            //     stack : 200,
+            //     cards: [46, 12]
+            // }
+        ],
         bank: 50,
         stack: 150,
         minCall: 2,
         minRaise: 4,
         isBet: false
     };
+    getEmptySeatId = (e) => {
+        socket.emit('seat_reservation', {id: e.target.dataset.id});
+    };
+    handleGetBuyIn = (value) => {
+        socket.emit('get_buyIn', {data: value})
+    }
+
 
     componentDidMount() {
-        Handlers.setPlayersInfo = players => {
-            this.setState({players});
-        };
-        console.log(this.state.players)
-
-        Handlers.setCards = cards => {
-            //
-        }
-
-        start();
+        socket.on('game-info', (mes) => this.onServerMessage(mes));
     }
 
     setBank = (value) => {
@@ -34,7 +44,7 @@ class PokerRoom extends Component {
     };
 
     onFold = () => {
-
+        socket.emit('fold');
     };
 
     onCall = (val) => {
@@ -45,19 +55,31 @@ class PokerRoom extends Component {
 
     };
 
-    // onServerMessage = (mes) => {
-    //     switch (mes.type) {
-    //         case 'updatePlayersInfo':
-    //             this.setState({players: mes.data.players});
-    //             break;
-    //         // case ''
-    //     }
-    // };
+    //ОБРАБОТЧИК СОБЫТИЙ С СЕРВЕРА
+    onServerMessage = (mes) => {
+        switch (mes.type) {
+            case 'players-info':
+                this.setState({players: mes.players});
+                break;
+            case 'reserved_seats':
+                this.setState({reservedSeats: mes.data});
+                break;
+            case 'user_disconnected':
+                this.setState({players: mes.players});
+                break;
+        }
+    };
 
     render() {
+        let {players, reservedSeats} = this.state;
         return (
             <div className={'poker_room-wrap'}>
-                <PokerTable players={this.state.players}/>
+                <PokerTable
+                    players={players}
+                    getEmptySeatId={this.getEmptySeatId}
+                    reservedSeats={reservedSeats}
+                    handleGetBuyIn={this.handleGetBuyIn}
+                />
                 <GameControlButtons
                     bank={this.state.bank}
                     stack={this.state.stack}

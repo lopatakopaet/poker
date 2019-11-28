@@ -1,3 +1,28 @@
+.bank{
+    display: flex;
+    justify-content: center;
+    font-family: sans-serif;
+    color: white;
+    padding: 15px 0 0 0;
+}
+.bank_value{
+    color: #E6E1A9;
+}
+.buy-in_window{
+    width: 400px;
+    height: 500px;
+    background: #BAAB8A;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    z-index: 1000;
+}
+.test{
+    background: red;
+}
 .table_layout{
     background: black;
     position: relative;
@@ -36,14 +61,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(#322C1F,#000000);
+    background: linear-gradient(#65583D,#000000);
     font-family: sans-serif;
     text-transform: uppercase;
     font-weight: bold;
     color: #fff;
+    height: 100px;
     width: 150px;
     border: 2px solid #322C1F;
-    border-radius: 50%;
+    border-radius: 40px;
     cursor: pointer;
 }
 .players-top_section, .players-mid_section, .players-bottom_section{
@@ -89,12 +115,12 @@
     border-radius: 2px;
 
 }
-.player_info-name{
+.player_info-name {
     color: #C56E27;
     /*font-family: sans-serif;*/
     /*font-weight: bold;*/
 }
-.player_info-chips{
+.player_info-chips {
     color: #E6E1A9;
 }
 .player_info_game-position{
@@ -110,6 +136,14 @@
 /*    background: #1878D6;*/
 /*    color: white;*/
 /*}*/
+.cards-on-table .card {
+    height: 120px;
+    width: 83px;
+    border: 1px solid #65583D;
+    border-radius: 3px;
+    margin: 0 3px;
+}
+
 .cards-on-table{
     display: flex;
 }

@@ -97,14 +97,4 @@ input[type=range]::-ms-thumb {
     justify-content: space-around;
     margin-top: 5px;
 }
-.button{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50px;
-    width: 120px;
-    color: white;
-    border: 1px solid silver;
-    border-radius: 4px;
-}
 

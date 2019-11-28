@@ -45,7 +45,7 @@ class GameControlButtons extends Component {
 
     render() {
         return (
-            <div className="controls">
+            <div className={"controls"}>
 
                 <div className="fixed_raise_buttons">
                     {tabs.map(tab => <div key={tab.id} onClick={() => {
