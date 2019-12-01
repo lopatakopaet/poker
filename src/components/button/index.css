@@ -19,6 +19,10 @@
     user-select: none;
 }
 
+.button.c-red {
+    background: red;
+}
+
 
 .button:hover{
     cursor: pointer;

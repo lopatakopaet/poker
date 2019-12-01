@@ -28,15 +28,17 @@ class PokerRoom extends Component {
         isBet: false
     };
     getEmptySeatId = (e) => {
-        socket.emit('seat_reservation', {id: e.target.dataset.id});
+        socket.emit('seat_reservation', {seatId: +e.target.dataset.id});
     };
     handleGetBuyIn = (value) => {
-        socket.emit('get_buyIn', {data: value})
-    }
+        socket.emit('get_buyIn', {buyIn: value, userId: socket.id})
+        console.log(this.state.players)
+    };
 
 
     componentDidMount() {
         socket.on('game-info', (mes) => this.onServerMessage(mes));
+
     }
 
     setBank = (value) => {
@@ -58,14 +60,13 @@ class PokerRoom extends Component {
     //ОБРАБОТЧИК СОБЫТИЙ С СЕРВЕРА
     onServerMessage = (mes) => {
         switch (mes.type) {
-            case 'players-info':
-                this.setState({players: mes.players});
-                break;
-            case 'reserved_seats':
-                this.setState({reservedSeats: mes.data});
-                break;
-            case 'user_disconnected':
-                this.setState({players: mes.players});
+            case 'players_info':
+                const {reservedSeats, playersOnTable} = mes.info;
+                console.log(mes.info);
+                this.setState({
+                    players: playersOnTable || this.state.players,
+                    reservedSeats: reservedSeats || this.state.reservedSeats,
+                });
                 break;
         }
     };

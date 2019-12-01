@@ -1,16 +1,19 @@
 const app = require('express')();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
-
 const coreGame = require('../core-game');
-let playersOnTable = [];
-let reservedSeats = [];
 
 app.get('/', function (req, res) {
     res.send('<h1>Hello world</h1>');
 });
 
+const onConnectUser = () => {
+    io.sockets.emit('game-info', {type: 'players_info', info: coreGame.getGlobalPlayersInfo()});
+};
 io.on('connection', function (socket) {
+
+    onConnectUser();
+
     // let player = {
     //     id: socket.id,
     //     gameId: 4,
@@ -22,42 +25,38 @@ io.on('connection', function (socket) {
     // playersOnTable.push(player);
 
     socket.on('disconnect', () => {
-        let id = playersOnTable.findIndex((elem) => elem.id == socket.id);
-        playersOnTable.splice(id, 1);
-        io.sockets.emit('game-info', {type: 'user_disconnected',players:playersOnTable});
-        let reservedSeatId = reservedSeats.findIndex(elem => elem.userId == socket.id);
-        if (reservedSeatId != -1){
-            reservedSeats.splice(reservedSeatId, 1);
-        }
-    })
+        coreGame.disconnectUser({userId: socket.id});
+        io.sockets.emit('game-info', {type: 'players_info', info: coreGame.getGlobalPlayersInfo()});
+    });
 
     //резервируем выбранное место за столом
     socket.on('seat_reservation', (data) => {
-        let player = {
-            seatId: data.id,
-            userId: socket.id,
-        };
-        if (reservedSeats.filter(elem => elem.seatId == data.id).length < 1){
-            reservedSeats.push(player);
-        }
-        io.sockets.emit('game-info', {type: 'reserved_seats', data: reservedSeats});
-        console.log(reservedSeats)
-    })
-    //дублирую событие, чтобы новый игрок видел зарезервированные места
-    io.sockets.emit('game-info', {type: 'reserved_seats', data: reservedSeats});
+        coreGame.reserveSeat({seatId: data.seatId, userId: socket.id});
+        io.sockets.emit('game-info', {type: 'players_info', info: coreGame.getGlobalPlayersInfo()});
+    });
+    //
+    socket.on('get_buyIn', data => {
+            let {buyIn, userId} = data;
+        let {reservedSeats} = coreGame.getGlobalPlayersInfo();
+        let elem = reservedSeats.find(elem => elem.userId === userId);
+        let {seatId} = elem || {};
+        coreGame.addPlayerOnTable({buyIn: buyIn, userId: socket.id, seatId: seatId});
+        io.sockets.emit('game-info', {type: 'players_info', info: coreGame.getGlobalPlayersInfo()});
 
-    io.sockets.emit('game-info', {type: 'players-info', players: playersOnTable});
-
-    socket.on('get_buyIn', buyIn =>{
-        let value = buyIn.data;
-        console.log(value)
-    })
-
-
+        // if (coreGame.isGameAllow()){
+        //     let playersInGame = coreGame.setHands();
+        //     playersInGame.forEach(elem => {
+        //         io.to(elem.userId).emit('game-info', {type: 'players_info', info: {
+        //                 playersOnTable: playersInGame.map(player => {
+        //                     return elem.userId === player.userId ? elem : {...player, cards: [52, 52]};
+        //                 })
+        //         }});
+        //     })
+        // }
+    });
 
     socket.on('fold', function (msg) {
         console.log(socket.id);
-        console.log(playersOnTable);
         // io.emit('chat message', msg);
     });
 

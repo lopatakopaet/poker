@@ -1,16 +1,20 @@
-import React, {Component} from 'react';
+import React from 'react';
 import './index.css'
 
-class Button extends Component {
-    render() {
-        return (
-            <div className={'button'} onClick={this.props.onClick}>
-                <span >{this.props.name}</span>
-            </div>
-        );
+export const Button = (props) => {
+    let {name, color, onClick} = props;
+    let className = 'button';
+
+    if (color) {
+        className = `${className} c-${color}`;
     }
-}
+
+    return (
+        <div className={className} onClick={onClick}>
+            <span >{name}</span>
+        </div>
+    );
+};
 
 export default Button;
 
-// this.props.params ? this.props.params : ''
