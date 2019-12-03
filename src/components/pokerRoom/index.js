@@ -12,7 +12,8 @@ class PokerRoom extends Component {
     state = {
         // playerId: 111,
         reservedSeats: [],
-        players: [
+        playersInGame:[],
+        playersOnTable: [
             // {
             //     id : 11111,
             //     name : 'Vasya',
@@ -31,8 +32,8 @@ class PokerRoom extends Component {
         socket.emit('seat_reservation', {seatId: +e.target.dataset.id});
     };
     handleGetBuyIn = (value) => {
-        socket.emit('get_buyIn', {buyIn: value, userId: socket.id})
-        console.log(this.state.players)
+        socket.emit('get_buyIn', {buyIn: value, userId: socket.id});
+        console.log(this.state.playersOnTable)
     };
 
 
@@ -61,10 +62,11 @@ class PokerRoom extends Component {
     onServerMessage = (mes) => {
         switch (mes.type) {
             case 'players_info':
-                const {reservedSeats, playersOnTable} = mes.info;
+                const {reservedSeats, playersOnTable,playersInGame} = mes.info;
                 console.log(mes.info);
                 this.setState({
-                    players: playersOnTable || this.state.players,
+                    playersOnTable: playersOnTable || this.state.playersOnTable,
+                    playersInGame: playersInGame || this.state.playersInGame,
                     reservedSeats: reservedSeats || this.state.reservedSeats,
                 });
                 break;
@@ -72,11 +74,13 @@ class PokerRoom extends Component {
     };
 
     render() {
-        let {players, reservedSeats} = this.state;
+        let {playersOnTable, reservedSeats, playersInGame} = this.state;
+        // let {playersOnTable, playersInGame} = this.state;
         return (
             <div className={'poker_room-wrap'}>
                 <PokerTable
-                    players={players}
+                    playersOnTable={playersOnTable}
+                    playersInGame = {playersInGame}
                     getEmptySeatId={this.getEmptySeatId}
                     reservedSeats={reservedSeats}
                     handleGetBuyIn={this.handleGetBuyIn}
@@ -92,8 +96,6 @@ class PokerRoom extends Component {
                     onRaise={this.onRaise}
                 />
             </div>
-
-
         );
     }
 }

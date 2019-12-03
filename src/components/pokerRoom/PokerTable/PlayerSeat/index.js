@@ -31,23 +31,25 @@ import React from 'react';
 
 
 
-export const PlayerSeat = ({playerData}) => {
-    let {userId, buyIn,cards} = playerData;
+    export const PlayerSeat = ({playerData, playerInGame}) => {
+    let {userId, buyIn} = playerData;
+    let {cards,BB,SB} = playerInGame  || {};
+    // let {BB,SB} = playerInGame  || {};
     let cardImg1 = cards && `img/${cards[0]}.png` ;
     let cardImg2 = cards && `img/${cards[1]}.png`;
 
     return (
         <div className="player_block player_1">
-           {cards  ?
-            <div className="player_block-cards">
-                <img src={cardImg1} alt="card"></img>
-                <img src={cardImg2} alt="card"></img>
-            </div> : <div className="test">11111111111111111111111</div>}
+            {cards && cards.length === 2  ?
+                <div className="player_block-cards">
+                    <img src={cardImg1} alt="card"/>
+                    <img src={cardImg2} alt="card"/>
+                </div> : <div className="test player_block-cards"></div>}
             <div className="player_info">
                 <div className="player_info-name">{userId}</div>
                 <div className="player_info-chips">{buyIn}</div>
-                {/*{position &&*/}
-                {/*<div className="player_info_game-position player_info_game-position--mp">{position}</div>}*/}
+                { (BB || SB) &&
+                <div className="player_info_game-position player_info_game-position--mp">{BB || SB}</div>}
             </div>
         </div>
     )

@@ -9,29 +9,29 @@ class PokerTable extends Component {
     state = {
         bayIn:0,
         visibleBlock:'none',
-        players: [
-            // {
-            //     id: 111,
-            //     name: 'Vasya',
-            //     bank: 110,
-            //     position: 'SB',
-            //     cards: [46, 12],
-            // },
-            // {
-            //     id: 222,
-            //     name: 'Petya',
-            //     bank: 220,
-            //     position: 'BB',
-            //     cards: [8, 11],
-            // },
-            // {
-            //     id: 333,
-            //     name: 'Pisun',
-            //     bank: 330,
-            //     position: '',
-            //     cards: [45, 35],
-            // }
-        ],
+        // players: [
+        //     // {
+        //     //     id: 111,
+        //     //     name: 'Vasya',
+        //     //     bank: 110,
+        //     //     position: 'SB',
+        //     //     cards: [46, 12],
+        //     // },
+        //     // {
+        //     //     id: 222,
+        //     //     name: 'Petya',
+        //     //     bank: 220,
+        //     //     position: 'BB',
+        //     //     cards: [8, 11],
+        //     // },
+        //     // {
+        //     //     id: 333,
+        //     //     name: 'Pisun',
+        //     //     bank: 330,
+        //     //     position: '',
+        //     //     cards: [45, 35],
+        //     // }
+        // ],
         cardsOnTable: []
         // cardsOnTable: [0,1, 2, 3, 4]
     };
@@ -55,12 +55,14 @@ class PokerTable extends Component {
     };
 
     getPlayer = ({seatId}) => {
-        return this.props.players.find(player => +player.seatId === +seatId);
-
+        return this.props.playersOnTable.find(player => +player.seatId === +seatId);
+    };
+    getPlayerInGame = ({seatId}) => {
+        return this.props.playersInGame.find(player => +player.seatId === +seatId);
     };
 
     render() {
-        let {players, cardsOnTable, reservedSeats} = this.props;
+        let {playersInGame, cardsOnTable, reservedSeats} = this.props;
         return (
             <div className="table_layout" >
                 {/*форма получения размера бай-ина*/}
@@ -76,7 +78,7 @@ class PokerTable extends Component {
                     {/*ТРЕТИЙ ИГРОК*/}
                     {
                         (this.getPlayer({seatId: 3}))
-                            ? <PlayerSeat playerData={this.getPlayer({seatId: 3})}/>
+                            ? <PlayerSeat playerData={this.getPlayer({seatId: 3})} playerInGame={this.getPlayerInGame({seatId: 3})} />
                             // ? <Button color={'red'} name={'test'}/> :
 
                             :(reservedSeats.findIndex(elem => elem && +elem.seatId === 3) !== -1
@@ -87,7 +89,7 @@ class PokerTable extends Component {
                     {/*ЧЕТВЕРТЫЙ ИГРОК*/}
                     {
                         (this.getPlayer({seatId: 4}))
-                            ? <PlayerSeat playerData={this.getPlayer({seatId: 4})}/>
+                            ? <PlayerSeat playerData={this.getPlayer({seatId: 4})} playerInGame={this.getPlayerInGame({seatId: 4})}/>
                             :(reservedSeats.findIndex(elem => elem && +elem.seatId === 4) !== -1
                                 ? <div className="empty_seat">игрок садится</div>
                                 : <div className="empty_seat" data-id = {'4'} onClick = {this.handleClickOnEmptySeat}>Занять место</div>)
