@@ -51,11 +51,11 @@ class PokerRoom extends Component {
     };
 
     onCall = (val) => {
-
+        socket.emit('call');
     };
 
     onRaise = (val) => {
-
+        socket.emit('raise',{value:val});
     };
 
     //ОБРАБОТЧИК СОБЫТИЙ С СЕРВЕРА

@@ -24,6 +24,7 @@ class MoneyInGame {
         return this.bank += value
     }
 }
+let moneyInGame = new MoneyInGame(1);
 
 
 // const onConnectUser = () => {
@@ -85,16 +86,7 @@ io.on('connection', function (socket) {
 
     refreshPokerTableDisplay();
 
-    // let player = {
-    //     id: socket.id,
-    //     gameId: 4,
-    //     name: 'Vasya',
-    //     position: 'BB',
-    //     stack: 200,
-    //     cards: [46, 22]
-    // };
-
-    socket.on('disconnect', () => {
+     socket.on('disconnect', () => {
         sockets.splice(sockets.findIndex(elem => elem === socket.id), 1);
         coreGame.disconnectUser({userId: socket.id});
         refreshPokerTableDisplay();
@@ -138,7 +130,7 @@ io.on('connection', function (socket) {
             let playersInGame = coreGame.setHands();
             coreGame.setPlayersPosition(playersInGame);
             coreGame.setActivePlayerInGame(playersInGame);
-            let moneyInGame = new MoneyInGame(1);
+            // let moneyInGame = new MoneyInGame(1);
             coreGame.bbDoBet(playersInGame,moneyInGame.bb);
             coreGame.sbDoBet(playersInGame,moneyInGame.sb);
 
@@ -152,10 +144,30 @@ io.on('connection', function (socket) {
         let activeUser =  coreGame.getActivePlayer(playersInGame);
         if (activeUser && activeUser.userId === socket.id) {
             coreGame.playerLost({userId: activeUser.userId});
+            coreGame.setActivePlayerInGame(playersInGame);
             refreshPokerTableDisplay();
         }
         // io.emit('chat message', msg);
     });
+    socket.on('call', function () {
+        let playersInGame = coreGame.getPlayersInGame();
+        let activeUser =  coreGame.getActivePlayer(playersInGame);
+        if (activeUser && activeUser.userId === socket.id) {
+            coreGame.reducePlayerChips(playersInGame,socket.id, moneyInGame.minCall);
+            coreGame.setActivePlayerInGame(playersInGame);
+            refreshPokerTableDisplay();
+        }
+    })
+    socket.on('raise',  (val) => {
+        let{value} = val;
+        let playersInGame = coreGame.getPlayersInGame();
+        let activeUser =  coreGame.getActivePlayer(playersInGame);
+        if (activeUser && activeUser.userId === socket.id) {
+            coreGame.reducePlayerChips(playersInGame,socket.id, value);
+            coreGame.setActivePlayerInGame(playersInGame);
+            refreshPokerTableDisplay();
+        }
+    })
 });
 
 http.listen(3030, function () {

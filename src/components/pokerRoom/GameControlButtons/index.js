@@ -66,8 +66,8 @@ class GameControlButtons extends Component {
                 </div>
                 <div className="decision_control_buttons">
                     <div className="button" onClick={this.props.onFold}>Fold</div>
-                    <div className="button">Call</div>
-                    <div className="button">Raise to</div>
+                    <div className="button" onClick={this.props.onCall}>Call</div>
+                    <div className="button" onClick={()=>this.props.onRaise(this.state.chooseToRaise)}>Raise to</div>
                 </div>
             </div>
         );

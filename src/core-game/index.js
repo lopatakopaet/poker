@@ -307,6 +307,16 @@ const newHand = () => {
 
     }
 }
+const reducePlayerChips = (players,userId,value) =>{
+    let index = players.findIndex(elem => elem.userId === userId);
+    players[index].buyIn -= value;
+    playersOnTable[index].buyIn -= value;
+};
+const increasePlayerChips = (players,userId,value) =>{
+    let index = players.findIndex(elem => elem.userId === userId);
+    players[index].buyIn += value;
+    playersOnTable[index].buyIn += value;
+}
 
 const bbDoBet = (players,bb )=>{
     let playerOnBB = players.findIndex(elem => elem.BB === 'BB');
@@ -325,6 +335,8 @@ const sbDoBet = (players,sb )=>{
 
 module.exports.sbDoBet = sbDoBet;// на основе playersOnTable создает playersInGame с картами
 module.exports.bbDoBet = bbDoBet;// на основе playersOnTable создает playersInGame с картами
+module.exports.reducePlayerChips = reducePlayerChips;// на основе playersOnTable создает playersInGame с картами
+module.exports.increasePlayerChips = increasePlayerChips;// на основе playersOnTable создает playersInGame с картами
 module.exports.setHands = setHands;// на основе playersOnTable создает playersInGame с картами
 module.exports.setPlayersPosition = setPlayersPosition;//
 module.exports.setActivePlayerInGame = setActivePlayerInGame;//
