@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import './index.css'
-///////test button////
 import Button from "../../button";
 
 

@@ -4,3 +4,8 @@
     background: #d6b410e0;
     border: 2px solid red;
 }
+.player_chips{
+    position: absolute;
+    color: red;
+    font-size: 30px;
+}

@@ -11,11 +11,6 @@
     background: silver;
 }
 
-@media screen and (max-device-width: 620px) {
+@media screen and (max-device-width: 1200px) {
     .body_side-bar {display: none;}
 }
-
-/*}@media all and (max-device-width: 800px) {*/
-/*    .body_side-bar {display: none;}*/
-/*}*/
-

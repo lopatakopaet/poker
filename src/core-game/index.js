@@ -1,18 +1,3 @@
-    const B_BLIND = 2;
-    const S_BLIND = 1;
-    const TABLE_ID = 101010;
-    let dillerId = 111;
-    let currentPlayerId = 111;
-
-    // playersOnTable[
-    //    {
-    //      buyIn:12,
-    //      seatId:23423,
-    //      userId:3,
-    //  }
-    // ]
-
-
     // playersInGame[
     // {
     //     buyIn:12,
@@ -27,35 +12,21 @@
     //     isLost: false
     // }
     //]
-    class MoneyInGame {
-        constructor(sb) {
-            this.sb = sb;
-            this.bb = sb + sb;
-            this.minCall = this.bb;
-            this.bank = sb + this.bb;
-        }
-
-        setMinCall(value) {
-            return this.minCall += value;
-        }
-
-        setBank(value) {
-            return this.bank += value
-        }
-    }
-
-    // let bank = new moneyInGame(1,2);
-    // console.log(bank.bank);
-    // bank.setBank(10);
-    // console.log(bank.bank);
-
-    // let moneyInGame = {
-    //     bank:0,
-    //     sb: 1,
-    //     bb: 2,
-    //     minCall: 2,
+    // class MoneyInGame {
+    //     constructor(sb) {
+    //         this.sb = sb;
+    //         this.bb = sb + sb;
+    //         this.minCall = this.bb;
+    //         this.bank = sb + this.bb;
+    //     }
     //
+    //     setMinCall(value) {
+    //         return this.minCall += value;
+    //     }
     //
+    //     setBank(value) {
+    //         return this.bank += value
+    //     }
     // }
 
     let playersOnTable = [];
@@ -63,12 +34,10 @@
     const reservedSeats = [];
     let deck = [];
     let cardsOnTable = [];
-    // let moneyInGame = '';
     ///// методы определяющие позицию игрока (диллер,SB,BB)
     const setDealer = (players) => {
         players.sort((elem1, elem2) => elem1.seatId - elem2.seatId);
         let lastDealer = 0;
-
         players.find((elem, id) => {
             if (elem.dealer === true) {
                 elem.dealer = false;
@@ -82,15 +51,6 @@
         }
     };
 
-    // const getDealer = (players) => {
-    //     let dealer = '';
-    //     players.find((elem, id) => {
-    //         if (elem.dealer === true) {
-    //             dealer = id;
-    //         }
-    //     });
-    //     return dealer;
-    // };
     const getDealerId = (players) => players.findIndex(elem => elem.dealer === true);
 
     const setSB = (players) => {
@@ -107,7 +67,6 @@
         }
     };
 
-    // const getSB = (players) => players.find(elem => elem.SB === "SB");
     const getSBId = (players) => players.findIndex(elem => elem.SB === "SB");
 
     const setBB = (players) => {
@@ -127,29 +86,6 @@
 
     const getBBId = (players) => players.findIndex(elem => elem.BB === "BB");
 
-    //разбить на 2 функции,учитывающие в  раздаче игрок или нет
-    // const setActivePlayerInGame = (players) => {
-    //     let activePlayers = players.map(player => player.inHand);
-    //
-    //     players.sort((elem1, elem2) => elem1.seatId - elem2.seatId);
-    //     let lastActivePlayerID = '';
-    //     players.find((elem, id) => {
-    //         if (elem.activePlayer === true) {
-    //             elem.activePlayer = false;
-    //             lastActivePlayerID = id;
-    //         }
-    //     });
-    //     if (lastActivePlayerID) {
-    //         if (lastActivePlayerID >= players.length - 1) {
-    //             players[0].activePlayer = true;
-    //         } else players[lastActivePlayerID + 1].activePlayer = true;
-    //     } else {
-    //         let bbId = getBBId(players);
-    //         if (bbId >= players.length - 1) players[0].activePlayer = true;
-    //         else
-    //             players[bbId + 1].activePlayer = true;
-    //     }
-    // };
     const setNextActivePlayerByCurrentSeatId = (players, id) => {
         players.sort((elem1, elem2) => elem1.seatId - elem2.seatId);
         if (typeof id !== "undefined") {
@@ -180,30 +116,26 @@
                 let newActivePlayer = players.find(player => player.userId === currentActivePlayerId);
                 newActivePlayer.activePlayer = true;
             }
-        }
-        else
-            {
-        let bbId = getBBId(activePlayers);
-        let sbId = getSBId(activePlayers);
-        let dealerId = getDealerId(activePlayers);
-        if ( bbId !== -1 ) {
-            setNextActivePlayerByCurrentSeatId(activePlayers, bbId);
-            return;
-        }
-        if (sbId){
-            setNextActivePlayerByCurrentSeatId(players, sbId);
-            return;
-        }
-        if (dealerId){
-            setNextActivePlayerByCurrentSeatId(players, dealerId);
-        }
-        else {
-            players.sort((elem1, elem2) => elem1.seatId - elem2.seatId);
-            players[0].activePlayer = true;
-        }
+        } else {
+            let bbId = getBBId(activePlayers);
+            let sbId = getSBId(activePlayers);
+            let dealerId = getDealerId(activePlayers);
+            if (bbId !== -1) {
+                setNextActivePlayerByCurrentSeatId(activePlayers, bbId);
+                return;
+            }
+            if (sbId) {
+                setNextActivePlayerByCurrentSeatId(players, sbId);
+                return;
+            }
+            if (dealerId) {
+                setNextActivePlayerByCurrentSeatId(players, dealerId);
+            } else {
+                players.sort((elem1, elem2) => elem1.seatId - elem2.seatId);
+                players[0].activePlayer = true;
+            }
         }
     };
-
 
     const getActivePlayer = (players) => players.find(elem => elem.activePlayer === true);
 
@@ -212,8 +144,6 @@
         setSB(players);
         setBB(players);
     };
-
-    /////////
 
     function createDeck() {
         let arr = [];
@@ -284,37 +214,13 @@
         }
     };
 
-    const infoForViewer = () => {
-        playersInGame.forEach(elem => {
-            io.to(elem.userId).emit('game-info', {
-                type: 'players_info', info: {
-                    playersInGame: playersInGame.map(player => {
-                        return elem.userId === player.userId ? elem : {...player, cards: [52, 52]};
-                    })
-                }
-            });
-        })
-    }
-
     const getGlobalPlayersInfo = () => {
         return {
             reservedSeats,
             playersOnTable,
             cardsOnTable,
-            // playersInGame,
         }
     };
-
-    // if (coreGame.isGameAllow()){
-    //     let playersInGame = coreGame.setHands();
-    //     playersInGame.forEach(elem => {
-    //         io.to(elem.userId).emit('game-info', {type: 'players_info', info: {
-    //                 playersOnTable: playersInGame.map(player => {
-    //                     return elem.userId === player.userId ? elem : {...player, cards: [52, 52]};
-    //                 })
-    //         }});
-    //     })
-    // }
 
     const setHands = () => {
         deck = createDeck();
@@ -326,21 +232,6 @@
 
     const isGameAllow = () => !playersInGame.length && playersOnTable.length >= 3;
 
-    // const startGame = (userId) => {
-    //     if (isGameAllow()) {
-    //         playersInGame = setHands();
-    //         playersInGame.forEach(elem => {
-    //             io.to(elem.userId).emit('game-info', {
-    //                 type: 'players_info', info: {
-    //                     playersOnTable: playersInGame.map(player => {
-    //                         return elem.userId === player.userId ? elem : {...player, cards: [52, 52]};
-    //                     })
-    //                 }
-    //             });
-    //         })
-    //
-    //     }
-    // };
     const getPlayersOnTable = () => playersOnTable;
     const getPlayersInGame = () => playersInGame;
     const getReservedSeats = () => reservedSeats;
@@ -350,24 +241,18 @@
         playersInGame[index].inHand = false;
     };
 
-    // const createBank = (sb) =>{
-    //     moneyInGame = new Bank(sb)
-    // };
-    // const getMoneyInGame =()=> moneyInGame;
-
     const newHand = () => {
         if (isGameAllow()) {
             let playersInGame = setHands();
             setPlayersPosition(playersInGame);
             setActivePlayerInGame(playersInGame);
             let moneyInGame = new MoneyInGame(1);
-
         }
     };
     const isPlayerInHand = (players, userId) => {
         let index = players.find(user => user.userId === userId);
         return players[index].inHand
-    }
+    };
     const reducePlayerChips = (players, userId, value) => {
         let index = players.findIndex(elem => elem.userId === userId);
         players[index].buyIn -= value;
@@ -396,6 +281,10 @@
         playersOnTable[playerOnSB].buyIn -= sb;
         players[playerOnSB].bet = sb;
     };
+    const getPlayerBet = (players, userId) => {
+        let index = players.find(elem => elem.userId === userId);
+        return players[index].bet;
+    }
 
 
     const setFlopCards = () => {
@@ -429,6 +318,7 @@
     module.exports.getPlayersOnTable = getPlayersOnTable;//
     module.exports.getPlayersInGame = getPlayersInGame;//
     module.exports.getReservedSeats = getReservedSeats;//
+    module.exports.getPlayerBet = getPlayerBet;//
     module.exports.isGameAllow = isGameAllow;//
     module.exports.newHand = newHand;//
     module.exports.setFlopCards = setFlopCards;//
@@ -436,44 +326,10 @@
     module.exports.setRiverCards = setRiverCards;//
     module.exports.isContinueRound = isContinueRound;//
     module.exports.setPlayerBet = setPlayerBet;//
-    // module.exports.getMoneyInGame = getMoneyInGame;//
-    // module.exports.createBank = createBank;//
-
     module.exports.addPlayerOnTable = addPlayerOnTable;//
     module.exports.reserveSeat = reserveSeat;//
-
     module.exports.getGlobalPlayersInfo = getGlobalPlayersInfo;
-
     module.exports.disconnectUser = disconnectUser;
 
-    module.exports.players = [
-        // {
-        //     id: 111,
-        //     name: 'Vasya',
-        //     bank: 110,
-        //     // cards:[15, 12],
-        //     // combo:'',
-        // },
-        // {
-        //     id: 222,
-        //     name: 'Petya',
-        //     bank: 220,
-        // },
-        // {
-        //     id: 333,
-        //     name: 'Pisun',
-        //     bank: 330,
-        // }
-    ];
-
-    module.exports.start = (player) => {
-        // this.addPlayer =  () => {
-        //     players.push(player);
-        //     return players;
-        // }
-        players.push(player);
-        return players
-        // return 'test'
-    }
 
 

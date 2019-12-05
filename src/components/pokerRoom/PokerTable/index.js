@@ -49,7 +49,6 @@ class PokerTable extends Component {
                         <div className="buy-in_window-input-wrap">
                             <input id={'buy-in_window-input'} type="number" autoFocus={true} placeholder={0}
                                    onChange={this.handleChangeBuyInValue}/>
-
                             <Button onClick={() => {
                                 this.handleClickOnAcceptBuyIn(this.state.bayIn)
                             }} color={'red'} name={'Подтвердить'}/>
@@ -64,7 +63,6 @@ class PokerTable extends Component {
                         (this.getPlayer({seatId: 3}))
                             ? <PlayerSeat playerData={this.getPlayer({seatId: 3})}
                                           playerInGame={this.getPlayerInGame({seatId: 3})}/>
-                            // ? <Button color={'red'} name={'test'}/> :
                             : (reservedSeats.findIndex(elem => elem && +elem.seatId === 3) !== -1
                             ? <div className="empty_seat">игрок садится</div>
                             : (playersOnTable.findIndex(elem => elem && elem.userId === currentUserId) !== -1
@@ -163,11 +161,3 @@ class PokerTable extends Component {
 }
 
 export default PokerTable;
-
-// :(reservedSeats.findIndex(elem => elem && +elem.seatId === 3) !== -1
-//     ? <div className="empty_seat">игрок садится</div>
-//     : (playersInGame.findIndex(elem => elem && +elem.userId === currentUserId) !== -1
-//         ? <div className="empty_seat" data-id = {'3'} >Пустое место</div>
-//         :
-//         <div className="empty_seat" data-id = {'3'}
-//              onClick = {this.handleClickOnEmptySeat}>Занять место</div>))

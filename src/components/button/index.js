@@ -11,7 +11,7 @@ export const Button = (props) => {
 
     return (
         <div className={className} onClick={onClick}>
-            <span >{name}</span>
+            <span>{name}</span>
         </div>
     );
 };

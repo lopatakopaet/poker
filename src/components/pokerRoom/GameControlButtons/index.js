@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import './index.css'
-import {switchCase} from "@babel/types";
 
 const tabs = [
     {id: 'minRaise', text: 'Min'},

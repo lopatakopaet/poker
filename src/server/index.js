@@ -8,6 +8,7 @@ app.get('/', function (req, res) {
 });
 
 const sockets = [];
+let bet = '';
 
 class MoneyInGame {
     constructor(sb) {
@@ -27,32 +28,9 @@ class MoneyInGame {
 }
 
 let moneyInGame = new MoneyInGame(1);
-// let bank = 0;
-
-
-// const onConnectUser = () => {
-//     io.sockets.emit('game-info', {type: 'players_info', info: coreGame.getGlobalPlayersInfo()});
-// };
 
 io.on('connection', function (socket) {
     sockets.push(socket.id);
-    // coreGame.setHands();
-    // coreGame.setFlopCards();///test
-    // coreGame.setTernCards();///test
-
-
-    const sendPersonalPlayersInfo = () => {
-        let playersOnTable = coreGame.getPlayersOnTable();
-        playersOnTable.forEach(elem => {
-            io.to(elem.userId).emit('game-info', {
-                type: 'players_info', info: {
-                    playersOnTable: playersOnTable.map(player => {
-                        return elem.userId === player.userId ? elem : {...player, cards: [52, 52]};
-                    })
-                }
-            });
-        })
-    };
 
     const refreshPokerTableDisplay = () => {
         io.sockets.emit('game-info', {type: 'players_info', info: coreGame.getGlobalPlayersInfo()});
@@ -60,27 +38,12 @@ io.on('connection', function (socket) {
             type: 'players_info', info: {
                 bank: moneyInGame.bank,
                 minCall: moneyInGame.minCall,
+                bet: bet,
             }
         });
         socket.emit('game-info', {type: 'players_info', info: {currentUserId: socket.id,}});
         sendPersonalCardInfo();
     };
-
-    // const sendPersonalCardInfo = (players) => {
-    //     let playersInGame;
-    //     if (players) playersInGame = players;
-    //     else playersInGame = coreGame.getPlayersInGame();
-    //     // playersInGame ? playersInGame : playersInGame = coreGame.getPlayersInGame();
-    //     playersInGame.forEach(elem => {
-    //         io.to(elem.userId).emit('game-info', {
-    //             type: 'players_info', info: {
-    //                 playersInGame: playersInGame.map(player => {
-    //                     return elem.userId === player.userId ? elem : {...player, cards: [52, 52]};
-    //                 })
-    //             }
-    //         });
-    //     })
-    // };
 
     const sendPersonalCardInfo = (players) => {
         let playersInGame;
@@ -107,7 +70,6 @@ io.on('connection', function (socket) {
         sockets.splice(sockets.findIndex(elem => elem === socket.id), 1);
         coreGame.disconnectUser({userId: socket.id});
         refreshPokerTableDisplay();
-
     });
 
     //резервируем выбранное место за столом
@@ -115,26 +77,6 @@ io.on('connection', function (socket) {
         coreGame.reserveSeat({seatId: data.seatId, userId: socket.id});
         refreshPokerTableDisplay();
     });
-    //
-    // socket.on('get_buyIn', data => {
-    //     let {buyIn, userId} = data;
-    //     let {reservedSeats} = coreGame.getGlobalPlayersInfo();
-    //     let elem = reservedSeats.find(elem => elem.userId === userId);
-    //     let {seatId} = elem || {};
-    //     coreGame.addPlayerOnTable({buyIn: buyIn, userId: socket.id, seatId: seatId});
-    //     io.sockets.emit('game-info', {type: 'players_info', info: coreGame.getGlobalPlayersInfo(socket.id)});
-    //
-    //     if (coreGame.isGameAllow()){
-    //         let playersInGame = coreGame.setHands();
-    //         playersInGame.forEach(elem => {
-    //             io.to(elem.userId).emit('game-info', {type: 'players_info', info: {
-    //                     playersInGame: playersInGame.map(player => {
-    //                         return elem.userId === player.userId ? elem : {...player, cards: [52, 52]};
-    //                     })
-    //             }});
-    //         })
-    //     }
-    // });
 
     socket.on('get_buyIn', data => {
         let {buyIn, userId} = data;
@@ -153,9 +95,6 @@ io.on('connection', function (socket) {
                 coreGame.setFlopCards();///test
             }
             // coreGame.setTernCards();///test
-            // coreGame.isContinueRound(playersInGame);///test
-
-
         }
         refreshPokerTableDisplay();
     });
@@ -187,14 +126,15 @@ io.on('connection', function (socket) {
     });
     socket.on('raise', (val) => {
         let {value} = val;
+
         let playersInGame = coreGame.getPlayersInGame();
         let activeUser = coreGame.getActivePlayer(playersInGame);
         if (activeUser && activeUser.userId === socket.id) {
             coreGame.reducePlayerChips(playersInGame, socket.id, value);
             moneyInGame.setBank(value);
             coreGame.setPlayerBet(playersInGame, socket.id, value);
+            bet = coreGame.getPlayerBet(playersInGame,socket.id);
             moneyInGame.setMinCall(value);
-            // bank = moneyInGame.setBank(value);
             coreGame.setActivePlayerInGame(playersInGame);
             if (!coreGame.isContinueRound(playersInGame)) {
                 !coreGame.setFlopCards() && coreGame.setFlopCards()

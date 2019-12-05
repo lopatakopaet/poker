@@ -16,15 +16,11 @@
     width: 400px;
     height: 400px;
     border-radius: 50%;
-    /*border-top-left-radius: 50%;*/
-    /*border-top-right-radius: 50%;*/
     padding: 10px;
-    /*background: цвет1; */
     background: -webkit-linear-gradient(#a0411c, #F0BE4D);
     background: -o-linear-gradient(#a0411c, #F0BE4D);
     background: -moz-linear-gradient(#a0411c, #F0BE4D);
     background: linear-gradient(#a0411c, #F0BE4D);
-    /*background: #399c49;*/
     position: absolute;
     top: 0;
     left: 0;
@@ -45,7 +41,6 @@
 .buy-in_window-info-wrap {
     display: flex;
     height: 125px;
-    /*flex-wrap: wrap;*/
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
@@ -71,6 +66,7 @@
 }
 
 .table_layout {
+    width: 80%;
     margin: 0 auto;
     background: black;
     position: relative;
@@ -84,8 +80,8 @@
 }
 
 .table {
-    /*background: #1E1E1E;*/
     width: 80%;
+    min-width: 650px;
     height: 80%;
     position: absolute;
     left: 0;
@@ -115,6 +111,7 @@
     border: 2px solid #322C1F;
     border-radius: 40px;
     cursor: pointer;
+    text-align: center;
 }
 
 .players-top_section, .players-mid_section, .players-bottom_section {
@@ -137,6 +134,7 @@
 }
 
 .player_block {
+    position: relative;
     width: 160px;
     font-family: sans-serif;
     font-weight: bold;
@@ -194,16 +192,21 @@
     border-radius: 3px;
     margin: 0 3px;
 }
-
 .cards-on-table {
     display: flex;
 }
 .active_player{
     border: 2px solid silver;
 }
-@media screen and (max-device-height: 500px) {
+@media screen and (max-device-height: 800px) {
     .player_block-cards {height: 80px;}
 }
-@media screen and (min-device-width: 1300px) {
-    .table_layout {width: 80%;}
+@media screen and (max-device-width: 1400px) {
+    .table_layout {width: 100%;}
+
+}
+@media screen and (max-device-width: 1280px) {
+    /*.table_layout {width: 100%;}*/
+    .empty_seat {width: 100px}
+    .player_info{width: 115px}
 }
