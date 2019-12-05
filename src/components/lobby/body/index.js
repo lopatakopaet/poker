@@ -21,7 +21,6 @@ class Body extends Component {
         return (
             <div className={'body_wrap'}>
                 <PokerRoom></PokerRoom>
-                <div className={'body_content'}></div>
                 <div className={'body_side-bar'}>
                     <p>{this.state.date.toLocaleTimeString()}</p>
                 </div>

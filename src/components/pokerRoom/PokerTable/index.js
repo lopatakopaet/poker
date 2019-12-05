@@ -7,50 +7,26 @@ import './index.css';
 
 class PokerTable extends Component {
     state = {
-        bayIn:0,
-        visibleBlock:'none',
-        // players: [
-        //     // {
-        //     //     id: 111,
-        //     //     name: 'Vasya',
-        //     //     bank: 110,
-        //     //     position: 'SB',
-        //     //     cards: [46, 12],
-        //     // },
-        //     // {
-        //     //     id: 222,
-        //     //     name: 'Petya',
-        //     //     bank: 220,
-        //     //     position: 'BB',
-        //     //     cards: [8, 11],
-        //     // },
-        //     // {
-        //     //     id: 333,
-        //     //     name: 'Pisun',
-        //     //     bank: 330,
-        //     //     position: '',
-        //     //     cards: [45, 35],
-        //     // }
-        // ],
+        bayIn: 0,
+        visibleBlock: 'none',
         cardsOnTable: []
-        // cardsOnTable: [0,1, 2, 3, 4]
     };
     hideBuyInBlock = () => {
         this.setState({visibleBlock: 'none'})
     };
-    showBuyInBlock =  () =>{
+    showBuyInBlock = () => {
         this.setState({visibleBlock: 'block'})
     };
-    handleClickOnEmptySeat = (e) =>{
+    handleClickOnEmptySeat = (e) => {
         this.props.getEmptySeatId(e);
         this.showBuyInBlock()
     };
-    handleClickOnAcceptBuyIn =(e) =>{
+    handleClickOnAcceptBuyIn = (e) => {
         this.props.handleGetBuyIn(e);
         this.hideBuyInBlock();
     };
 
-    handleChangeBuyInValue =(e)=>{
+    handleChangeBuyInValue = (e) => {
         this.setState({bayIn: e.target.value});
     };
 
@@ -62,15 +38,23 @@ class PokerTable extends Component {
     };
 
     render() {
-        let {playersInGame, cardsOnTable, reservedSeats} = this.props;
+        let {cardsOnTable, reservedSeats, bank, currentUserId, playersOnTable} = this.props;
         return (
-            <div className="table_layout" >
+            <div className="table_layout">
                 {/*форма получения размера бай-ина*/}
-                <div className={`buy-in_window`} style={{display:`${this.state.visibleBlock}`}}>
-                    <label htmlFor = {'buy-in_window-input'}>Введите сумму,которую возьмете за стол</label>
-                    <input id={'buy-in_window-input'} type="number" placeholder={0} onChange={this.handleChangeBuyInValue}/>
-                    <button onClick = {()=> {this.handleClickOnAcceptBuyIn(this.state.bayIn)} }>Принять</button>
-                    <Button color={'red'} name={'test'}/>
+                <div className={`buy-in_window`} style={{display: `${this.state.visibleBlock}`}}>
+                    <img className={'buy-in_window-chips'} src="chipsImg/chips.png" alt="chips"/>
+                    <div className={'buy-in_window-info-wrap'}>
+                        <label htmlFor={'buy-in_window-input '}><span className={'buy-in_window-input-label'}>укажите сумму фишек</span></label>
+                        <div className="buy-in_window-input-wrap">
+                            <input id={'buy-in_window-input'} type="number" autoFocus={true} placeholder={0}
+                                   onChange={this.handleChangeBuyInValue}/>
+
+                            <Button onClick={() => {
+                                this.handleClickOnAcceptBuyIn(this.state.bayIn)
+                            }} color={'red'} name={'Подтвердить'}/>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="table"></div>
@@ -78,72 +62,99 @@ class PokerTable extends Component {
                     {/*ТРЕТИЙ ИГРОК*/}
                     {
                         (this.getPlayer({seatId: 3}))
-                            ? <PlayerSeat playerData={this.getPlayer({seatId: 3})} playerInGame={this.getPlayerInGame({seatId: 3})} />
+                            ? <PlayerSeat playerData={this.getPlayer({seatId: 3})}
+                                          playerInGame={this.getPlayerInGame({seatId: 3})}/>
                             // ? <Button color={'red'} name={'test'}/> :
-
-                            :(reservedSeats.findIndex(elem => elem && +elem.seatId === 3) !== -1
-                                ? <div className="empty_seat">игрок садится</div>
-                                : <div className="empty_seat" data-id = {'3'}
-                                       onClick = {this.handleClickOnEmptySeat}>Занять место</div>)
+                            : (reservedSeats.findIndex(elem => elem && +elem.seatId === 3) !== -1
+                            ? <div className="empty_seat">игрок садится</div>
+                            : (playersOnTable.findIndex(elem => elem && elem.userId === currentUserId) !== -1
+                                ? <div className="empty_seat" data-id={'3'}>Пустое место</div>
+                                : <div className="empty_seat" data-id={'3'}
+                                       onClick={this.handleClickOnEmptySeat}>Занять место</div>))
                     }
                     {/*ЧЕТВЕРТЫЙ ИГРОК*/}
                     {
                         (this.getPlayer({seatId: 4}))
-                            ? <PlayerSeat playerData={this.getPlayer({seatId: 4})} playerInGame={this.getPlayerInGame({seatId: 4})}/>
-                            :(reservedSeats.findIndex(elem => elem && +elem.seatId === 4) !== -1
-                                ? <div className="empty_seat">игрок садится</div>
-                                : <div className="empty_seat" data-id = {'4'} onClick = {this.handleClickOnEmptySeat}>Занять место</div>)
+                            ? <PlayerSeat playerData={this.getPlayer({seatId: 4})}
+                                          playerInGame={this.getPlayerInGame({seatId: 4})}/>
+                            : (reservedSeats.findIndex(elem => elem && +elem.seatId === 4) !== -1
+                            ? <div className="empty_seat">игрок садится</div>
+                            : (playersOnTable.findIndex(elem => elem && elem.userId === currentUserId) !== -1
+                                ? <div className="empty_seat" data-id={'4'}>Пустое место</div>
+                                : <div className="empty_seat" data-id={'4'}
+                                       onClick={this.handleClickOnEmptySeat}>Занять место</div>))
                     }
                 </div>
                 <div className="players-mid_section">
 
-                {/*    ВТОРОЙ ИГРОК*/}
-                {
-                    (this.getPlayer({seatId: 2}))
-                        ? <PlayerSeat playerData={this.getPlayer({seatId: 2})}/>
-                        :(reservedSeats.findIndex(elem => elem && +elem.seatId === 2) !== -1
-                        ? <div className="empty_seat">игрок садится</div>
-                        : <div className="empty_seat" data-id = {'2'} onClick = {this.handleClickOnEmptySeat}>Занять место</div>)
-                }
-                {/*    Карты на столе*/}
+                    {/*    ВТОРОЙ ИГРОК*/}
+                    {
+                        (this.getPlayer({seatId: 2}))
+                            ? <PlayerSeat playerData={this.getPlayer({seatId: 2})}
+                                          playerInGame={this.getPlayerInGame({seatId: 2})}/>
+                            : (reservedSeats.findIndex(elem => elem && +elem.seatId === 2) !== -1
+                            ? <div className="empty_seat">игрок садится</div>
+                            : (playersOnTable.findIndex(elem => elem && elem.userId === currentUserId) !== -1
+                                ? <div className="empty_seat" data-id={'2'}>Пустое место</div>
+                                : <div className="empty_seat" data-id={'2'}
+                                       onClick={this.handleClickOnEmptySeat}>Занять место</div>))
+                    }
+                    {/*    Карты на столе*/}
                     {cardsOnTable && cardsOnTable.length > 0 ?
                         <div>
                             <TableCards cards={cardsOnTable}/>
-                            <div className={'bank'}>Total pot: <span className={'bank_value'}> 100</span></div>
-                            :
+                            <div className={'bank'}>Total pot: <span className={'bank_value'}> {bank}</span></div>
                         </div> :
-                        <div className="cards-on-table">
-                            <div className="card"></div>
-                            <div className="card"></div>
-                            <div className="card"></div>
-                            <div className="card"></div>
-                            <div className="card"></div>
-                        </div>}
-                {/*    ПЯТЫЙ ИГРОК*/}
-                {
-                    (this.getPlayer({seatId: 5}))
-                        ? <PlayerSeat playerData={this.getPlayer({seatId: 5})}/>
-                        :(reservedSeats.findIndex(elem => elem && +elem.seatId === 5) !== -1
-                        ? <div className="empty_seat">игрок садится</div>
-                        : <div className="empty_seat" data-id = {'5'} onClick = {this.handleClickOnEmptySeat}>Занять место</div>)
-                }
+                        <div>
+                            <div className="cards-on-table">
+                                <div className="cards-on-table">
+                                    <div className="card"/>
+                                    <div className="card"/>
+                                    <div className="card"/>
+                                    <div className="card"/>
+                                    <div className="card"/>
+                                </div>
+                            </div>
+                            <div className={'bank'}>Total pot: <span className={'bank_value'}> {bank}</span></div>
+                        </div>
+                    }
+                    {/*    ПЯТЫЙ ИГРОК*/}
+                    {
+                        (this.getPlayer({seatId: 5}))
+                            ? <PlayerSeat playerData={this.getPlayer({seatId: 5})}
+                                          playerInGame={this.getPlayerInGame({seatId: 5})}/>
+                            : (reservedSeats.findIndex(elem => elem && +elem.seatId === 5) !== -1
+                            ? <div className="empty_seat">игрок садится</div>
+                            : (playersOnTable.findIndex(elem => elem && elem.userId === currentUserId) !== -1
+                                ? <div className="empty_seat" data-id={'5'}>Пустое место</div>
+                                : <div className="empty_seat" data-id={'5'}
+                                       onClick={this.handleClickOnEmptySeat}>Занять место</div>))
+                    }
                 </div>
                 <div className="players-bottom_section">
-                {/*    ПЕРВЫЙ ИГРОК*/}
-                {
-                    (this.getPlayer({seatId: 1}))
-                        ? <PlayerSeat playerData={this.getPlayer({seatId: 1})}/>
-                        :(reservedSeats.findIndex(elem => elem && +elem.seatId === 1) !== -1
-                        ? <div className="empty_seat">игрок садится</div>
-                        : <div className="empty_seat" data-id = {'1'} onClick = {this.handleClickOnEmptySeat}>Занять место</div>)
-                }
-                {/*    НУЛЕВОЙ ИГРОК*/}
+                    {/*    ПЕРВЫЙ ИГРОК*/}
+                    {
+                        (this.getPlayer({seatId: 1}))
+                            ? <PlayerSeat playerData={this.getPlayer({seatId: 1})}
+                                          playerInGame={this.getPlayerInGame({seatId: 1})}/>
+                            : (reservedSeats.findIndex(elem => elem && +elem.seatId === 1) !== -1
+                            ? <div className="empty_seat">игрок садится</div>
+                            : (playersOnTable.findIndex(elem => elem && elem.userId === currentUserId) !== -1
+                                ? <div className="empty_seat" data-id={'1'}>Пустое место</div>
+                                : <div className="empty_seat" data-id={'1'}
+                                       onClick={this.handleClickOnEmptySeat}>Занять место</div>))
+                    }
+                    {/*    НУЛЕВОЙ ИГРОК*/}
                     {
                         (this.getPlayer({seatId: 0}))
-                            ? <PlayerSeat playerData={this.getPlayer({seatId: 0})}/>
-                            :(reservedSeats.findIndex(elem => elem && +elem.seatId === 0) !== -1
+                            ? <PlayerSeat playerData={this.getPlayer({seatId: 0})}
+                                          playerInGame={this.getPlayerInGame({seatId: 0})}/>
+                            : (reservedSeats.findIndex(elem => elem && +elem.seatId === 0) !== -1
                             ? <div className="empty_seat">игрок садится</div>
-                            : <div className="empty_seat" data-id = {'0'} onClick = {this.handleClickOnEmptySeat}>Занять место</div>)
+                            : (playersOnTable.findIndex(elem => elem && elem.userId === currentUserId) !== -1
+                                ? <div className="empty_seat" data-id={'0'}>Пустое место</div>
+                                : <div className="empty_seat" data-id={'0'}
+                                       onClick={this.handleClickOnEmptySeat}>Занять место</div>))
                     }
                 </div>
             </div>
@@ -152,3 +163,11 @@ class PokerTable extends Component {
 }
 
 export default PokerTable;
+
+// :(reservedSeats.findIndex(elem => elem && +elem.seatId === 3) !== -1
+//     ? <div className="empty_seat">игрок садится</div>
+//     : (playersInGame.findIndex(elem => elem && +elem.userId === currentUserId) !== -1
+//         ? <div className="empty_seat" data-id = {'3'} >Пустое место</div>
+//         :
+//         <div className="empty_seat" data-id = {'3'}
+//              onClick = {this.handleClickOnEmptySeat}>Занять место</div>))

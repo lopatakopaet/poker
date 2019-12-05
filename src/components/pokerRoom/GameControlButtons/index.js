@@ -74,4 +74,5 @@ class GameControlButtons extends Component {
     }
 }
 
+
 export default GameControlButtons;

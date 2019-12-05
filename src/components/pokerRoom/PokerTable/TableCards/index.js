@@ -11,19 +11,19 @@ class TableCards extends Component {
         return (
             <div className="cards-on-table">
                 <div className="card">
-                    <img src={flop1} alt="flop card"></img>
+                    {typeof cards[0] !== 'undefined' && <img src={flop1} alt="flop card"/>}
                 </div>
                 <div className="card">
-                    <img src={flop2} alt="flop card"></img>
+                    {typeof cards[1] !== 'undefined' && <img src={flop2} alt="flop card"/>}
                 </div>
                 <div className="card">
-                    <img src={flop3} alt="flop card"></img>
+                    {typeof cards[2] !== 'undefined' && <img src={flop3} alt="flop card"/>}
                 </div>
                 <div className="card">
-                    <img src={turn} alt="turn card"></img>
+                    {typeof cards[3] !== 'undefined' && <img src={turn} alt="turn card"/>}
                 </div>
                 <div className="card">
-                    <img src={river} alt="river card"></img>
+                    {typeof cards[4] !== 'undefined' && <img src={river} alt="river card"/>}
                 </div>
             </div>
         );

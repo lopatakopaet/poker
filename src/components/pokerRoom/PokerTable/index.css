@@ -1,17 +1,30 @@
-.bank{
+.bank {
     display: flex;
     justify-content: center;
     font-family: sans-serif;
     color: white;
     padding: 15px 0 0 0;
 }
-.bank_value{
+
+.bank_value {
     color: #E6E1A9;
 }
-.buy-in_window{
+
+.buy-in_window {
+    display: flex;
+    justify-content: center;
     width: 400px;
-    height: 500px;
-    background: #BAAB8A;
+    height: 400px;
+    border-radius: 50%;
+    /*border-top-left-radius: 50%;*/
+    /*border-top-right-radius: 50%;*/
+    padding: 10px;
+    /*background: цвет1; */
+    background: -webkit-linear-gradient(#a0411c, #F0BE4D);
+    background: -o-linear-gradient(#a0411c, #F0BE4D);
+    background: -moz-linear-gradient(#a0411c, #F0BE4D);
+    background: linear-gradient(#a0411c, #F0BE4D);
+    /*background: #399c49;*/
     position: absolute;
     top: 0;
     left: 0;
@@ -20,25 +33,58 @@
     margin: auto;
     z-index: 1000;
 }
-.test{
-    background: red;
+
+.buy-in_window button {
+
 }
-.table_layout{
+
+.buy-in_window-chips {
+    width: 385px;
+}
+
+.buy-in_window-info-wrap {
+    display: flex;
+    height: 125px;
+    /*flex-wrap: wrap;*/
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#buy-in_window-input {
+    width: 100px;
+    height: 30px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.buy-in_window-input-label {
+    color: white;
+    font-size: 28px;
+    text-transform: uppercase;
+    padding: 10px 0;
+}
+
+.buy-in_window-input-wrap {
+    display: flex;
+    align-items: center;
+}
+
+.table_layout {
+    margin: 0 auto;
     background: black;
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /*padding-top: 30px;*/
-    /*align-items: center;*/
-    /*width: 90%;*/
-    /*max-width: 90%;*/
-    min-width: 800px;
+    max-height: 800px;
     height: 80%;
     border: 1px solid black;
+
 }
-.table{
-    background: #1E1E1E;
+
+.table {
+    /*background: #1E1E1E;*/
     width: 80%;
     height: 80%;
     position: absolute;
@@ -47,21 +93,19 @@
     top: 0;
     bottom: 0;
     margin: auto;
-    /*display: flex;*/
-    /*flex-direction: column;*/
-    /*justify-content: space-between;*/
-    /*max-width: 800px;*/
-    /*width: 800px;*/
-    /*height: 400px;*/
-
     border: 1px solid black;
     border-radius: 50%;
+    background: #105414;
+    background: -moz-radial-gradient(center, ellipse cover, #105414 1%, #1a6810 57%, #1a6810 61%, #1a6810 61%, #115e17 66%, #468249 99%);
+    background: -webkit-radial-gradient(center, ellipse cover, #105414 1%, #1a6810 57%, #1a6810 61%, #1a6810 61%, #115e17 66%, #468249 99%);
+    background: radial-gradient(ellipse at center, #105414 1%, #1a6810 57%, #1a6810 61%, #1a6810 61%, #115e17 66%, #468249 99%);
 }
-.empty_seat{
+
+.empty_seat {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(#65583D,#000000);
+    background: linear-gradient(#65583D, #000000);
     font-family: sans-serif;
     text-transform: uppercase;
     font-weight: bold;
@@ -72,58 +116,68 @@
     border-radius: 40px;
     cursor: pointer;
 }
-.players-top_section, .players-mid_section, .players-bottom_section{
+
+.players-top_section, .players-mid_section, .players-bottom_section {
     display: flex;
     z-index: 100;
 
 }
-.players-top_section{
+
+.players-top_section {
     justify-content: space-around;
 }
-.players-mid_section{
+
+.players-mid_section {
     justify-content: space-between;
     align-items: center;
 }
-.players-bottom_section{
+
+.players-bottom_section {
     justify-content: space-around;
 }
-.player_block{
-    /*display: flex;*/
-    width: 150px;
+
+.player_block {
+    width: 160px;
     font-family: sans-serif;
     font-weight: bold;
-    /*height: 60px;*/
-    /*border: 1px solid red;*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-.player_block-cards{
+
+.player_block-cards {
     display: flex;
     justify-content: center;
-    height: 70px;
-    /*background: #5E5E5E;*/
+    height: 120px;
 }
-.player_block-cards img{
+
+.player_block-cards img {
     height: 100%;
 }
-.player_info{
+
+.player_info {
     position: relative;
     display: flex;
+    justify-content: center;
     background: black;
     flex-direction: column;
-    /*justify-content: center;*/
     align-items: center;
     border: 2px solid #322C1F;
     border-radius: 2px;
-
+    width: 170px;
+    height: 50px;
 }
+
 .player_info-name {
     color: #C56E27;
-    /*font-family: sans-serif;*/
-    /*font-weight: bold;*/
 }
+
 .player_info-chips {
     color: #E6E1A9;
+    font-size: 20px;
 }
-.player_info_game-position{
+
+.player_info_game-position {
     font-size: 14px;
     padding: 3px;
     position: absolute;
@@ -132,18 +186,24 @@
     background: #1878D6;
     color: white;
 }
-/*.player_info_game-position--bb{*/
-/*    background: #1878D6;*/
-/*    color: white;*/
-/*}*/
+
 .cards-on-table .card {
     height: 120px;
     width: 83px;
-    border: 1px solid #65583D;
+    border: 1px solid #b1801c;
     border-radius: 3px;
     margin: 0 3px;
 }
 
-.cards-on-table{
+.cards-on-table {
     display: flex;
+}
+.active_player{
+    border: 2px solid silver;
+}
+@media screen and (max-device-height: 500px) {
+    .player_block-cards {height: 80px;}
+}
+@media screen and (min-device-width: 1300px) {
+    .table_layout {width: 80%;}
 }

@@ -1,7 +1,9 @@
 .wrap_app{
   display: flex;
   flex-direction: column;
-  background: white;
+  /*background: white;*/
+  /*///test*/
+  /*width: 1320px;*/
   max-width: 1920px;
   height: 100vh;
 }

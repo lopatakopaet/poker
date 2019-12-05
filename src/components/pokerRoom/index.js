@@ -10,21 +10,14 @@ const socket = io('http://localhost:3030');
 
 class PokerRoom extends Component {
     state = {
-        // playerId: 111,
         reservedSeats: [],
         playersInGame:[],
-        playersOnTable: [
-            // {
-            //     id : 11111,
-            //     name : 'Vasya',
-            //     position: 'BB',
-            //     stack : 200,
-            //     cards: [46, 12]
-            // }
-        ],
-        bank: 50,
+        playersOnTable: [],
+        currentUserId: '',
+        bank: 0,
+        cardsOnTable:[],
         stack: 150,
-        minCall: 2,
+        minCall: 0,
         minRaise: 4,
         isBet: false
     };
@@ -42,10 +35,6 @@ class PokerRoom extends Component {
 
     }
 
-    setBank = (value) => {
-        this.setState({bank: value})
-    };
-
     onFold = () => {
         socket.emit('fold');
     };
@@ -62,20 +51,24 @@ class PokerRoom extends Component {
     onServerMessage = (mes) => {
         switch (mes.type) {
             case 'players_info':
-                const {reservedSeats, playersOnTable,playersInGame} = mes.info;
+                const {reservedSeats,currentUserId, playersOnTable,playersInGame,bank,cardsOnTable,minCall} = mes.info;
                 console.log(mes.info);
                 this.setState({
                     playersOnTable: playersOnTable || this.state.playersOnTable,
                     playersInGame: playersInGame || this.state.playersInGame,
                     reservedSeats: reservedSeats || this.state.reservedSeats,
+                    bank: bank || this.state.bank,
+                    minCall: minCall || this.state.minCall,
+                    cardsOnTable: cardsOnTable || this.state.cardsOnTable,
+                    currentUserId: currentUserId || this.state.currentUserId,
+
                 });
                 break;
         }
     };
 
     render() {
-        let {playersOnTable, reservedSeats, playersInGame} = this.state;
-        // let {playersOnTable, playersInGame} = this.state;
+        let {playersOnTable,currentUserId, reservedSeats, playersInGame,bank, cardsOnTable} = this.state;
         return (
             <div className={'poker_room-wrap'}>
                 <PokerTable
@@ -84,6 +77,9 @@ class PokerRoom extends Component {
                     getEmptySeatId={this.getEmptySeatId}
                     reservedSeats={reservedSeats}
                     handleGetBuyIn={this.handleGetBuyIn}
+                    cardsOnTable = {cardsOnTable}
+                    currentUserId = {currentUserId}
+                    bank = {bank}
                 />
                 <GameControlButtons
                     bank={this.state.bank}

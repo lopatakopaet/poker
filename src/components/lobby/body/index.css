@@ -1,13 +1,21 @@
 .body_wrap{
     display: flex;
-    background: rosybrown;
-    width: 100%;
+    /*width: 100%;*/
+    width: 100vw;
+    min-height: 550px;
     height: 100vh;
 }
-.body_content{
-    flex-grow: 1;
-}
+
 .body_side-bar{
-    width: 25%;
+    width: 300px;
     background: silver;
 }
+
+@media screen and (max-device-width: 620px) {
+    .body_side-bar {display: none;}
+}
+
+/*}@media all and (max-device-width: 800px) {*/
+/*    .body_side-bar {display: none;}*/
+/*}*/
+

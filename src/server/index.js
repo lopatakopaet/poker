@@ -8,6 +8,7 @@ app.get('/', function (req, res) {
 });
 
 const sockets = [];
+
 class MoneyInGame {
     constructor(sb) {
         this.sb = sb;
@@ -17,14 +18,16 @@ class MoneyInGame {
     }
 
     setMinCall(value) {
-        return this.minCall += value;
+        return this.minCall = +value;
     }
 
     setBank(value) {
-        return this.bank += value
+        return this.bank += +value
     }
 }
+
 let moneyInGame = new MoneyInGame(1);
+// let bank = 0;
 
 
 // const onConnectUser = () => {
@@ -33,6 +36,10 @@ let moneyInGame = new MoneyInGame(1);
 
 io.on('connection', function (socket) {
     sockets.push(socket.id);
+    // coreGame.setHands();
+    // coreGame.setFlopCards();///test
+    // coreGame.setTernCards();///test
+
 
     const sendPersonalPlayersInfo = () => {
         let playersOnTable = coreGame.getPlayersOnTable();
@@ -48,7 +55,14 @@ io.on('connection', function (socket) {
     };
 
     const refreshPokerTableDisplay = () => {
-        io.sockets.emit('game-info', {type: 'players_info', info: coreGame.getGlobalPlayersInfo()})
+        io.sockets.emit('game-info', {type: 'players_info', info: coreGame.getGlobalPlayersInfo()});
+        io.sockets.emit('game-info', {
+            type: 'players_info', info: {
+                bank: moneyInGame.bank,
+                minCall: moneyInGame.minCall,
+            }
+        });
+        socket.emit('game-info', {type: 'players_info', info: {currentUserId: socket.id,}});
         sendPersonalCardInfo();
     };
 
@@ -72,12 +86,15 @@ io.on('connection', function (socket) {
         let playersInGame;
         if (players) playersInGame = players;
         else playersInGame = coreGame.getPlayersInGame();
-        // playersInGame ? playersInGame : playersInGame = coreGame.getPlayersInGame();
         sockets.forEach(elem => {
             io.to(elem).emit('game-info', {
                 type: 'players_info', info: {
                     playersInGame: playersInGame.map(player => {
-                        return elem === player.userId ? player : {...player, cards: [52, 52]};
+                        if (elem === player.userId) {
+                            return player
+                        } else if (player.inHand) {
+                            return {...player, cards: [52, 52]}
+                        } else return {...player, cards: []};
                     })
                 }
             });
@@ -86,7 +103,7 @@ io.on('connection', function (socket) {
 
     refreshPokerTableDisplay();
 
-     socket.on('disconnect', () => {
+    socket.on('disconnect', () => {
         sockets.splice(sockets.findIndex(elem => elem === socket.id), 1);
         coreGame.disconnectUser({userId: socket.id});
         refreshPokerTableDisplay();
@@ -130,41 +147,58 @@ io.on('connection', function (socket) {
             let playersInGame = coreGame.setHands();
             coreGame.setPlayersPosition(playersInGame);
             coreGame.setActivePlayerInGame(playersInGame);
-            // let moneyInGame = new MoneyInGame(1);
-            coreGame.bbDoBet(playersInGame,moneyInGame.bb);
-            coreGame.sbDoBet(playersInGame,moneyInGame.sb);
+            coreGame.bbDoBet(playersInGame, moneyInGame.bb);
+            coreGame.sbDoBet(playersInGame, moneyInGame.sb);
+            if (!coreGame.isContinueRound(playersInGame)) {
+                coreGame.setFlopCards();///test
+            }
+            // coreGame.setTernCards();///test
+            // coreGame.isContinueRound(playersInGame);///test
+
 
         }
-        // coreGame.newHand();
-         refreshPokerTableDisplay();
+        refreshPokerTableDisplay();
     });
 
     socket.on('fold', function (msg) {
         let playersInGame = coreGame.getPlayersInGame();
-        let activeUser =  coreGame.getActivePlayer(playersInGame);
+        let activeUser = coreGame.getActivePlayer(playersInGame);
         if (activeUser && activeUser.userId === socket.id) {
-            coreGame.playerLost({userId: activeUser.userId});
             coreGame.setActivePlayerInGame(playersInGame);
+            coreGame.playerLost({userId: activeUser.userId});
             refreshPokerTableDisplay();
         }
-        // io.emit('chat message', msg);
+        refreshPokerTableDisplay();
     });
     socket.on('call', function () {
         let playersInGame = coreGame.getPlayersInGame();
-        let activeUser =  coreGame.getActivePlayer(playersInGame);
+        let activeUser = coreGame.getActivePlayer(playersInGame);
         if (activeUser && activeUser.userId === socket.id) {
-            coreGame.reducePlayerChips(playersInGame,socket.id, moneyInGame.minCall);
+            coreGame.reducePlayerChips(playersInGame, socket.id, moneyInGame.minCall);
+            moneyInGame.setBank(moneyInGame.minCall);
             coreGame.setActivePlayerInGame(playersInGame);
+            coreGame.setPlayerBet(playersInGame, socket.id, moneyInGame.minCall);
+            coreGame.isContinueRound(playersInGame);///test
+            if (!coreGame.isContinueRound(playersInGame)) {
+                !coreGame.setFlopCards() && coreGame.setFlopCards()
+            }
             refreshPokerTableDisplay();
         }
-    })
-    socket.on('raise',  (val) => {
-        let{value} = val;
+    });
+    socket.on('raise', (val) => {
+        let {value} = val;
         let playersInGame = coreGame.getPlayersInGame();
-        let activeUser =  coreGame.getActivePlayer(playersInGame);
+        let activeUser = coreGame.getActivePlayer(playersInGame);
         if (activeUser && activeUser.userId === socket.id) {
-            coreGame.reducePlayerChips(playersInGame,socket.id, value);
+            coreGame.reducePlayerChips(playersInGame, socket.id, value);
+            moneyInGame.setBank(value);
+            coreGame.setPlayerBet(playersInGame, socket.id, value);
+            moneyInGame.setMinCall(value);
+            // bank = moneyInGame.setBank(value);
             coreGame.setActivePlayerInGame(playersInGame);
+            if (!coreGame.isContinueRound(playersInGame)) {
+                !coreGame.setFlopCards() && coreGame.setFlopCards()
+            }
             refreshPokerTableDisplay();
         }
     })

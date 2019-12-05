@@ -1,5 +1,11 @@
 .poker_room-wrap{
     padding: 20px;
-    width: 100%;
+    /*width: 100%;*/
+    min-height: 500px;
     background: #000;
+    flex-grow: 1;
+}
+.players-top_section, .players-bottom_section{
+    height: 153px;
+    align-items: flex-end;
 }

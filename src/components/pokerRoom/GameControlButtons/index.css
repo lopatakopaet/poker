@@ -6,6 +6,8 @@
     background: black;
     border: 1px solid silver;
     width: 400px;
+    padding: 5px;
+    margin-top: 10px;
 }
 .fixed_raise_buttons{
     display: flex;
